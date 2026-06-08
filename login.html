@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma;
+}
+
+body{
+background:#f5f7fa;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.card{
+background:white;
+width:90%;
+max-width:380px;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,.1);
+text-align:center;
+}
+
+.logo{
+width:90px;
+height:90px;
+border-radius:50%;
+margin-bottom:15px;
+}
+
+.title{
+font-size:26px;
+font-weight:bold;
+color:#1565c0;
+margin-bottom:25px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:8px 0;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+background:#1565c0;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0d47a1;
+}
+
+.create{
+margin-top:15px;
+display:block;
+text-decoration:none;
+color:#1565c0;
+font-weight:bold;
+}
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<img src="logo.png" class="logo">
+
+<div class="title">
+معهد المستقبل
+</div>
+
+<input type="text" id="username" placeholder="اسم المستخدم">
+
+<input type="password" id="password" placeholder="كلمة المرور">
+
+<button onclick="login()">
+تسجيل الدخول
+</button>
+
+<a href="users.html" class="create">
+إنشاء حساب جديد
+</a>
+<button onclick="showUsers()">عرض المستخدمين</button>
+</div>
+
+<script>
+
+function login(){
+
+let username = document.getElementById("username").value.trim();
+let password = document.getElementById("password").value.trim();
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+for(let i=0;i<users.length;i++){
+
+alert(
+"المستخدم المخزن: [" + users[i].username + "]\n" +
+"كلمة المرور المخزنة: [" + users[i].password + "]"
+);
+
+if(
+users[i].username.trim() == username &&
+users[i].password.trim() == password
+){
+
+alert("تم العثور على المستخدم");
+
+return;
+
+}
+
+}
+
+alert("لم يتم العثور على المستخدم");
+
+}
+function showUsers(){
+alert(localStorage.getItem("users"));
+}
+</script>
+</body>
+</html>

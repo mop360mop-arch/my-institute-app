@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المستخدمين</title>
+
+<style>
+
+body{
+font-family:Tahoma;
+background:#f5f5f5;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:5px 0;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:2px;
+}
+
+.save{
+background:#1565c0;
+color:white;
+}
+
+.delete{
+background:red;
+color:white;
+}
+
+.active{
+background:green;
+color:white;
+}
+
+.inactive{
+background:orange;
+color:white;
+}
+
+table{
+width:100%;
+background:white;
+border-collapse:collapse;
+}
+
+th,td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#1565c0;
+color:white;
+}
+
+h2{
+margin-top:0;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<h2>إنشاء حساب</h2>
+
+<input type="text" id="username" placeholder="اسم المستخدم">
+
+<input type="password" id="password" placeholder="كلمة المرور">
+
+<input type="text" id="phone" placeholder="رقم الهاتف">
+
+<button class="save" onclick="saveUser()">
+حفظ
+</button>
+
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>اسم المستخدم</th>
+<th>كلمة المرور</th>
+<th>رقم الهاتف</th>
+<th>الحالة</th>
+<th>التحكم</th>
+</tr>
+</thead>
+
+<tbody id="usersTable">
+</tbody>
+
+</table>
+
+<script>
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+window.onload = drawTable;
+
+function saveUser(){
+
+let username = document.getElementById("username").value.trim();
+let password = document.getElementById("password").value.trim();
+let phone = document.getElementById("phone").value.trim();
+
+if(username==="" || password==="" || phone===""){
+alert("يرجى ملء جميع الحقول");
+return;
+}
+
+let user = {
+username: username,
+password: password,
+phone: phone,
+status: true
+};
+
+users.push(user);
+
+localStorage.setItem("users", JSON.stringify(users));
+
+document.getElementById("username").value="";
+document.getElementById("password").value="";
+document.getElementById("phone").value="";
+
+drawTable();
+
+}
+
+function drawTable(){
+
+let html = "";
+
+users.forEach((u,i)=>{
+
+html += `
+<tr>
+
+<td>${u.username}</td>
+
+<td>${u.password}</td>
+
+<td>${u.phone}</td>
+
+<td>${u.status ? "مفعل" : "معطل"}</td>
+
+<td>
+
+<button
+class="${u.status ? "inactive" : "active"}"
+onclick="toggleUser(${i})">
+
+${u.status ? "تعطيل" : "تفعيل"}
+
+</button>
+
+<button
+class="delete"
+onclick="deleteUser(${i})">
+
+حذف
+
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+document.getElementById("usersTable").innerHTML = html;
+
+}
+
+function toggleUser(i){
+
+users[i].status = !users[i].status;
+
+localStorage.setItem("users", JSON.stringify(users));
+
+drawTable();
+
+}
+
+function deleteUser(i){
+
+if(confirm("هل تريد حذف المستخدم؟")){
+
+users.splice(i,1);
+
+localStorage.setItem("users", JSON.stringify(users));
+
+drawTable();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
