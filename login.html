@@ -102,7 +102,6 @@ font-weight:bold;
 <a href="users.html" class="create">
 إنشاء حساب جديد
 </a>
-<button onclick="showUsers()">عرض المستخدمين</button>
 </div>
 
 <script>
@@ -114,32 +113,26 @@ let password = document.getElementById("password").value.trim();
 
 let users = JSON.parse(localStorage.getItem("users")) || [];
 
-for(let i=0;i<users.length;i++){
-
-alert(
-"المستخدم المخزن: [" + users[i].username + "]\n" +
-"كلمة المرور المخزنة: [" + users[i].password + "]"
+let user = users.find(u =>
+u.username.trim() === username &&
+u.password.trim() === password &&
+u.status === true
 );
 
-if(
-users[i].username.trim() == username &&
-users[i].password.trim() == password
-){
+if(user){
 
-alert("تم العثور على المستخدم");
+localStorage.setItem("currentUser", user.username);
 
-return;
+window.location.href = "home.html";
+
+}else{
+
+alert("اسم المستخدم أو كلمة المرور غير صحيحة أو الحساب معطل");
+
+}
 
 }
 
-}
-
-alert("لم يتم العثور على المستخدم");
-
-}
-function showUsers(){
-alert(localStorage.getItem("users"));
-}
 </script>
 </body>
 </html>
